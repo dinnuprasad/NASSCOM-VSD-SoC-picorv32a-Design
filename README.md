@@ -58,37 +58,77 @@ After completion of synthesis, gate level netlist is generated using Yosys.
 
 #### 2. Calculate the flop ratio.
 
-![Screenshot 2024-10-04 195649](https://github.com/user-attachments/assets/bf6f4eb3-633d-4304-b929-9fbe15a30fce)
-![Screenshot 2024-10-04 195732](https://github.com/user-attachments/assets/27a9d942-38ad-4bfa-af8e-210bf7c85ad2)
-
 To Calculare the Flop Ratio:-
 ```math
-Flop\ Ratio = \frac{Number\ of\ D\ Flip\ Flops}{Total\ Number\ of\ Cells}
+Flop\ Ratio = \frac{Number\ of\ Required\ Cells}{Total\ Number\ of\ Cells}
 ```
 ```math
-Percentage\ of\ DFF = Flop\ Ratio * 100
+Percentage = Flop\ Ratio * 100
 ```
 
-Calculation of Flop Ratio of DFF from synthesis statistics report file,
+![Screenshot 2024-10-04 195649](https://github.com/user-attachments/assets/bf6f4eb3-633d-4304-b929-9fbe15a30fce)
+
+![Screenshot 2024-10-04 195732](https://github.com/user-attachments/assets/27a9d942-38ad-4bfa-af8e-210bf7c85ad2)
+
+Calculation of Flop Ratio of DFFs from statistics report file,
 ```math
 Flop\ Ratio = \frac{1613}{14876} = 0.108429685
 ```
 ```math
-Percentage\ of\ DFF = 0.108429685 * 100 = 10.84296854\ \%
+Percentage\ of\ DFFs = 0.108429685 * 100 = 10.8429685\ \%
 ```
 
 ## Section 2: Good floorplan vs bad floorplan and introduction to library cells.
 
 Section 2 tasks:- 
-1. Run 'picorv32a' design floorplan using OpenLANE flow and generate necessary outputs.
-2. Calculate the die area in microns from the values in floorplan def.
+1. Run picorv32a design floorplan.
+2. Calculate the die area in microns from floorplan.def file.
 3. Load generated floorplan def in magic tool and explore the floorplan.
 4. Run 'picorv32a' design congestion aware placement using OpenLANE flow and generate necessary outputs.
 5. Load generated placement def in magic tool and explore the placement.
 
-## <a id="section1"></a>Section 1: Inception of open_source EDA, OpenLANE and SKY130 PDK
-## <a id="section2"></a>Section 2: Good floorplan vs bad floorplan and introduction to library cells
-## <a id="section3"></a>Section 3: Design library cell using Magic Layout and ngspice characterization
-## <a id="section4"></a>Section 4: Pre-layout timing analysis and importance of good clock tree
-## <a id="section5"></a>Section 5: Final steps for RTL2GDS using tritonRoute and OpenSTA
-<h2 id="section1">Section 1: Inception of open_source EDA, OpenLANE and SKY130 PDK</h2>
+#### 1. Running picorv32a design floorplan.
+
+```tcl
+# Gate level netlist is synthesized, after floorplanning is designed by,
+run_floorplan
+```
+
+To design according to the required optimizations, there are various switches are used to control the flow and design according to the requirements,
+
+![Screenshot 2024-10-09 180532](https://github.com/user-attachments/assets/42d30a89-607b-4af3-8600-2c3c1b04e0e4)
+
+![Screenshot 2024-10-09 180910](https://github.com/user-attachments/assets/54081c06-ad23-46f1-a467-d389360f91f0)
+
+![Screenshot 2024-10-09 180934](https://github.com/user-attachments/assets/f8ef167b-70e5-4f9a-8a23-a9ccbaf82424)
+
+#### 2. Calculate the die area in microns from floorplan.def file.
+
+```math
+Area\ of\ die\ in\ microns = Die\ width\ in\ microns * Die\ height\ in\ microns
+```
+
+![Screenshot 2024-10-09 181714](https://github.com/user-attachments/assets/75ba539d-9a23-4ee4-b2a0-7715e8369d36)
+
+According to floorplan.def
+```math
+1000\ Unit\ Distance = 1\ Micron
+```
+```math
+Die\ width\ in\ unit\ distance = 660685 - 0 = 660685
+```
+```math
+Die\ height\ in\ unit\ distance = 671405 - 0 = 671405
+```
+```math
+Distance\ in\ microns = \frac{Value\ in\ Unit\ Distance}{1000}
+```
+```math
+Die\ width\ in\ microns = \frac{660685}{1000} = 660.685\ Microns
+```
+```math
+Die\ height\ in\ microns = \frac{671405}{1000} = 671.405\ Microns
+```
+```math
+Area\ of\ die\ in\ microns = 660.685 * 671.405 = 443587.212\ Square\ Microns
+```
