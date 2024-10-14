@@ -84,7 +84,7 @@ Section 2 tasks:-
 1. Run picorv32a design floorplan.
 2. Calculate the die area in microns from floorplan.def file.
 3. Load generated floorplan def in magic tool and explore the floorplan.
-4. Run 'picorv32a' design congestion aware placement using OpenLANE flow and generate necessary outputs.
+4. Run picorv32a design congestion aware placement using OpenLANE flow and generate necessary outputs.
 5. Load generated placement def in magic tool and explore the placement.
 
 #### 1. Running picorv32a design floorplan.
@@ -132,3 +132,95 @@ Die\ height\ in\ microns = \frac{671405}{1000} = 671.405\ Microns
 ```math
 Area\ of\ die\ in\ microns = 660.685 * 671.405 = 443587.212\ Square\ Microns
 ```
+
+#### 3. Load generated floorplan def in magic tool and explore the floorplan.
+
+```bash
+# Change directory to path containing generated floorplan.def
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/09-10_12-26/results/floorplan/
+
+# Command to load the floorplan def in magic tool
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.floorplan.def &
+```
+
+Floorplan.def in the magic tool,
+
+![Screenshot 2024-10-09 184645](https://github.com/user-attachments/assets/c3a4aa8b-652b-464f-ba1c-78f843d1113a)
+
+We can see the port placement, diagonally placing decap & tap cells and unplaced stnd_cells placed at the origin,
+
+![Screenshot 2024-10-09 185118](https://github.com/user-attachments/assets/afab80ce-0858-498e-82a8-d6411053c1ee)
+
+Port layer information as per config.tcl,
+
+![Screenshot 2024-10-09 185427](https://github.com/user-attachments/assets/7b9d09fa-1058-4b3d-9127-f8898f0820da)
+![Screenshot 2024-10-09 185519](https://github.com/user-attachments/assets/56ce2789-c173-445c-8611-fb1bc3c303e4)
+
+#### 4. Run picorv32a design congestion aware placement using OpenLANE flow and generate necessary outputs.
+
+```tcl
+# Congestion aware placement
+run_placement
+```
+
+![Screenshot 2024-10-09 191233](https://github.com/user-attachments/assets/d2c8bbb8-8373-46a6-90ad-6ee8bda196b8)
+![Screenshot 2024-10-09 191346](https://github.com/user-attachments/assets/72e1af16-a768-45b9-a0b6-d598db29118b)
+
+#### 5. Load generated placement def in magic tool and explore the placement.
+
+```bash
+# Change directory to path containing generated placement def
+cd Desktop/work/tools/openlane_working_dir/openlane/designs/picorv32a/runs/09-10_13-39/results/placement/
+
+# Command to load the placement def in magic tool
+magic -T /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def read picorv32a.placement.def &
+```
+
+![Screenshot 2024-10-09 193312](https://github.com/user-attachments/assets/cf14e136-f867-4536-9450-79136e319e08)
+
+Metal layers to place the cells,
+
+![image](https://github.com/user-attachments/assets/2955cee3-b626-4b2b-8062-be38bac2b69d)
+![image](https://github.com/user-attachments/assets/a197314f-d239-4fc6-8157-847468aa5879)
+
+Formation of via in between the metal layers,
+
+![image](https://github.com/user-attachments/assets/142d2f49-bbce-4d09-936a-1133ed3ded5f)
+
+Standard cells are placed,
+
+![Screenshot 2024-10-09 194409](https://github.com/user-attachments/assets/3369fe19-1ff9-4ed5-a126-bbc707cfc990)
+
+## Section 3 - Design library cell using Magic Layout and ngspice characterization
+
+* Section 3 tasks:-
+1. Clone custom inverter standard cell design from github repository.
+2. Load the custom inverter layout in magic and explore.
+3. Spice extraction of inverter in magic.
+4. Editing the spice model file for analysis through simulation.
+5. Post-layout ngspice simulations.
+6. Find problem in the DRC section of the old magic tech file for the skywater process and fix them.
+
+#### 1. Clone custom inverter standard cell design from github repository
+
+```bash
+# Change directory to openlane
+cd Desktop/work/tools/openlane_working_dir/openlane
+
+# Clone the repository with custom inverter design
+git clone https://github.com/nickson-jose/vsdstdcelldesign
+
+# Change into repository directory
+cd vsdstdcelldesign
+
+# Copy magic tech file to the repo directory for easy access
+cp /home/vsduser/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech .
+
+# Check contents whether everything is present
+ls
+
+# Command to open custom inverter layout in magic
+magic -T sky130A.tech sky130_inv.mag &
+```
+
+Screenshot of commands run
